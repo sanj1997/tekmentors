@@ -1,12 +1,12 @@
 
 import './App.css';
 import { Box } from '@chakra-ui/react';
-import UploadCSV from './Components/UploadCSV';
+import TaxCalculator from './Components/TaxCalculator';
 
 function App() {
   return (
     <Box>
-      <UploadCSV/>
+      <TaxCalculator/>
     </Box>
   );
 }

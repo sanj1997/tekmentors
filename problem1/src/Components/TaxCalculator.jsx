@@ -1,20 +1,28 @@
-import { Box, Button, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, Text, useToast } from '@chakra-ui/react'
 import React from 'react'
 import { useState } from 'react';
-import {styles} from "../Styles/uploadStyles"
+// import {styles} from "../Styles/uploadStyles"
 
-import {useCSVReader,useCSVDownloader, jsonToCSV} from "react-papaparse"
+import {useCSVReader,useCSVDownloader} from "react-papaparse"
 const TaxRate={
     0:15,
     1:8,
     2:12
 }
-const UploadCSV = () => {
+const styles = {
+  progressBarBackgroundColor: {
+    backgroundColor: '#00a0dc',
+    marginTop:"20px"
+  } 
+}
+
+const TaxCalculator = () => {
   const { CSVReader } = useCSVReader();
   const { CSVDownloader, Type } = useCSVDownloader();
   const [data,setData]=useState([])
   const [output,setOutput]=useState([])
-  const [show,setShow]=useState(false)
+  const [download,setDownload]=useState(false)
+  const toast=useToast()
   const [disabled,setDisabled]=useState(true)
   const handleCalculateTax=()=>{
        let taxData=[]
@@ -34,12 +42,17 @@ const UploadCSV = () => {
        }
      })
      setOutput([...output,...taxData])
-     setShow(true)
+     setDownload(true)
+     toast({
+      title:"Tax calculated successfully",
+      status:"success",
+      duration:3000
+     })
   }
- 
+  
   return (
-    <Box>
-      <Text textAlign={"center"} fontWeight="bold" fontSize={"2xl"}>Tax Calculator</Text>
+    <Box width={"80%"} margin="auto">
+      <Text textAlign={"center"} fontWeight="bold" fontSize={"2xl"} mt="20px" mb={"20px"}>Tax Calculator</Text>
       <CSVReader
       onUploadAccepted={(results) => {
         const info=results.data.slice(1)
@@ -54,34 +67,36 @@ const UploadCSV = () => {
         getRemoveFileProps,
       }) => (
         <>
-          <div style={styles.csvReader}>
-            <button type='button' {...getRootProps()} style={styles.browseFile}>
+          <Flex justifyContent="space-around">
+            <Button width={"10%"} {...getRootProps()}>
               Browse file
-            </button>
-            <div style={styles.acceptedFile}>
+            </Button>
+            <Box width={"80%"} border="1px solid black" pl={"10px"} display={"flex"} alignItems={"center"}>
               {acceptedFile && acceptedFile.name}
-            </div>
-            <button {...getRemoveFileProps()} style={styles.remove}>
+            </Box>
+            <Button width={"10%"} bg={"#ee1c25"} _hover={{bg:"#ee1c25"}} color="white" {...getRemoveFileProps()}>
               Remove
-            </button>
-          </div>
+            </Button>
+          </Flex>
           <ProgressBar style={styles.progressBarBackgroundColor} />
         </>
       )}
     </CSVReader>
+    <Box border={"2px dotted black"} m="auto" mt="50px" width={"50%"} display="flex" gap={"20px"} justifyContent={"center"} alignItems="center" p="50px">
     <Button onClick={handleCalculateTax} disabled={disabled}>Calculate Tax</Button>
-    {show? <CSVDownloader
-      filename={'tax'}
+    {<CSVDownloader
+      filename={'result'}
       bom={true}
       config={{
         delimiter: ',',
       }}
       data={output}
     >
-      <Button>Download CSV</Button>
-    </CSVDownloader>:null}
+      <Button disabled={!download} >Download CSV</Button>
+    </CSVDownloader>}
+    </Box>
     </Box>
   )
 }
 
-export default UploadCSV
+export default TaxCalculator
