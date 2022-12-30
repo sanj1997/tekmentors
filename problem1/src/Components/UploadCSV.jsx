@@ -3,7 +3,7 @@ import React from 'react'
 import { useState } from 'react';
 import {styles} from "../Styles/uploadStyles"
 
-import {useCSVReader} from "react-papaparse"
+import {useCSVReader,useCSVDownloader, jsonToCSV} from "react-papaparse"
 const TaxRate={
     0:15,
     1:8,
@@ -11,39 +11,40 @@ const TaxRate={
 }
 const UploadCSV = () => {
   const { CSVReader } = useCSVReader();
+  const { CSVDownloader, Type } = useCSVDownloader();
   const [data,setData]=useState([])
-  const [output,setOutput]=useState([["s.no", "amount", "item_type", "tax"]])
+  const [output,setOutput]=useState([])
   const [show,setShow]=useState(false)
-
+  const [disabled,setDisabled]=useState(true)
   const handleCalculateTax=()=>{
-       console.log(data,"data")
        let taxData=[]
        let slno=0
        data.forEach((el,i)=>{
-        // console.log(el[2])
        if(TaxRate[el[2]]!=undefined)
        {
-          console.log(TaxRate[el[2]],"obj")
-          let arr=[]
+          let obj={}
           let tax=el[1]*(+TaxRate[el[2]]/100)
-          arr.push(slno,el[1],TaxRate[el[2]]+"%",tax)
-          taxData.push(arr)
+          obj["slno"]=`${slno}`
+          obj["amount"]=`${el[1]}`
+          obj["item_type"]=`${TaxRate[el[2]]+"%"}`
+          obj["tax"]=`${tax}`
+          const jsonData=JSON.stringify(obj)
+          taxData.push(obj)
           slno++
        }
      })
-     console.log(taxData,"hey")
+     setOutput([...output,...taxData])
+     setShow(true)
   }
+ 
   return (
     <Box>
       <Text textAlign={"center"} fontWeight="bold" fontSize={"2xl"}>Tax Calculator</Text>
       <CSVReader
       onUploadAccepted={(results) => {
-        // console.log("hey")
-        // console.log(results,"heyy");
-        // const header=results.data[0]
-        // console.log(header,"hello")
         const info=results.data.slice(1)
         setData(info)
+        setDisabled(false)
       }}
     >
       {({
@@ -68,8 +69,17 @@ const UploadCSV = () => {
         </>
       )}
     </CSVReader>
-    <Button onClick={handleCalculateTax}>Calculate Tax</Button>
-    {show? <Button>Download CSV</Button>:null}
+    <Button onClick={handleCalculateTax} disabled={disabled}>Calculate Tax</Button>
+    {show? <CSVDownloader
+      filename={'tax'}
+      bom={true}
+      config={{
+        delimiter: ',',
+      }}
+      data={output}
+    >
+      <Button>Download CSV</Button>
+    </CSVDownloader>:null}
     </Box>
   )
 }
