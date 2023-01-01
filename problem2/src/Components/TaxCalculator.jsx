@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box,TableContainer,Table,TableCaption,Thead,Tr,Th,Td,Tbody,Button,useToast } from "@chakra-ui/react";
 import { AppContext } from "../Context/AppContext";
 import {v4} from "uuid"
@@ -9,7 +9,7 @@ const TaxCalculator = () => {
   const toast=useToast()
   useEffect(() => {
     setData(db.invoices);
-  }, [data]);
+  }, []);
 
   const handleTaxCalculate=(amount,type)=>{
       if(tax[type]!=undefined)
@@ -23,6 +23,7 @@ const TaxCalculator = () => {
       }
       else
       {
+        setOutput("Invalid")
          toast({
             title:"Invalid Item Type",
             status:"error",
@@ -46,7 +47,7 @@ const TaxCalculator = () => {
           <Tbody>
            {data?.map((el)=>{
               return (
-                <Tr key={v4()}>
+                <Tr data-cy="row" key={v4()}>
                     <Td textAlign={"center"}>{el.sno}</Td>
                     <Td textAlign={"center"}>{el.amount}</Td>
                     <Td textAlign={"center"}>{el.item_type}</Td>

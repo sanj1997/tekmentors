@@ -8,7 +8,7 @@ const TaxOutput = () => {
         <Flex w="40%" alignItems="center"  >
             <Text fontWeight={"bold"}>Calculated Tax Value: </Text>
             <Box ml={"10px"} width={"40%"} border={"1px solid black"} p={"15px"} textAlign="left">
-                <Text>{output}</Text>
+                <Text data-cy="output" >{output}</Text>
             </Box>
         </Flex>
     </Box>
