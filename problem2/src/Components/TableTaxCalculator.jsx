@@ -34,14 +34,14 @@ const TaxCalculator = () => {
   return (
     <Box width={"80%"} m="auto" mt={"20px"}>
       <TableContainer>
-        <Table variant="striped" colorScheme="teal" size={"md"}>
-          <TableCaption>Tax Calculator based on Item Type</TableCaption>
+        <Table variant="striped" bg="teal" size={"md"}>
+          <TableCaption color={"#acdb67"}>Tax Calculator based on Item Type</TableCaption>
           <Thead>
             <Tr >
-              <Th textAlign={"center"}>S.No</Th>
-              <Th textAlign={"center"}>Amount</Th>
-              <Th textAlign={"center"}>Item Type</Th>
-              <Th textAlign={"center"}>Calculate Tax</Th>
+              <Th color={"black"} textAlign={"center"}>S.No</Th>
+              <Th color={"black"} textAlign={"center"}>Amount</Th>
+              <Th color={"black"} textAlign={"center"}>Item Type</Th>
+              <Th color={"black"} textAlign={"center"}>Calculate Tax</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -51,7 +51,7 @@ const TaxCalculator = () => {
                     <Td textAlign={"center"}>{el.sno}</Td>
                     <Td textAlign={"center"}>{el.amount}</Td>
                     <Td textAlign={"center"}>{el.item_type}</Td>
-                    <Td textAlign={"center"}><Button onClick={()=>handleTaxCalculate(el.amount,el.item_type)}>Calculate</Button></Td>
+                    <Td textAlign={"center"}><Button bg={"#bfc0c5"} onClick={()=>handleTaxCalculate(el.amount,el.item_type)}>Calculate</Button></Td>
                 </Tr>
               )
            })} 

@@ -4,11 +4,11 @@ import { AppContext } from '../Context/AppContext'
 const TaxOutput = () => {
     const {output} =useContext(AppContext)
   return (
-    <Box width={"80%"} m="auto" display={"flex"} justifyContent="start" mt="20px">
-        <Flex w="40%" alignItems="center"  >
-            <Text fontWeight={"bold"}>Calculated Tax Value: </Text>
-            <Box ml={"10px"} width={"40%"} border={"1px solid black"} p={"15px"} textAlign="left">
-                <Text data-cy="output" >{output}</Text>
+    <Box bg={"#011627"} width={"80%"} m="auto" display={"flex"} justifyContent="start" mt="20px">
+        <Flex bg="" w="40%" alignItems="center"  >
+            <Text color={"#acdb67"} fontWeight={"bold"}>Calculated Tax Value: </Text>
+            <Box ml={"10px"} width={"40%"} border={"1px solid #acdb67"} p={"15px"} textAlign="left">
+                <Text color={"#acdb67"}  data-cy="output" >{output}</Text>
             </Box>
         </Flex>
     </Box>
